@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { showMessage } from './Alert';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,11 +70,10 @@ export default function EditApplicationDialog({
 		try {
 			await updateApplication(id, payload);
 			await refresh();
+			showMessage('Successfully updated!', 'success');
 			setOpen(false);
 		} catch (error) {
-			//
-		} finally {
-			//
+			showMessage('An error occured', 'error');
 		}
 	};
 
