@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getApplications } from '@/api/applications';
+import { getApplications, Application } from '@/api/applications';
 
-import ApplicationTable from '@/components/table/ApplicationTable';
+import { columns } from '@/components/table/Columns';
+import { DataTable } from '@/components/table/DataTable';
 import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
 import AddApplicationDialog from '@/components/dialog/AddApplicationDialog';
 
+// Fetch applications on initial page load
 function useGetApplications() {
 	const [applications, setApplications] = useState([]);
 	const fetchApplications = async () => {
@@ -23,14 +25,19 @@ function useGetApplications() {
 
 export default function Home() {
 	const { fetchApplications, applications } = useGetApplications();
-	const [editDialog, setEditDialog] = useState(null);
+	const [editDialog, setEditDialog] = useState<String | boolean>(false);
 
+	// Fetch applications after each update
 	const refreshApplications = async () => {
 		await fetchApplications();
 	};
 
-	const setEdit = (v: Number | boolean) => {
-		setEditDialog(v.id);
+	const setEdit = (v: Application | boolean) => {
+		if (typeof v === 'boolean') {
+			setEditDialog(v);
+		} else {
+			setEditDialog(v.id);
+		}
 	};
 
 	return (
@@ -48,7 +55,7 @@ export default function Home() {
 					<AddApplicationDialog refresh={refreshApplications} />
 				</div>
 
-				<ApplicationTable data={applications} setEdit={setEdit} />
+				<DataTable columns={columns} data={applications} setEdit={setEdit} />
 			</main>
 		</div>
 	);

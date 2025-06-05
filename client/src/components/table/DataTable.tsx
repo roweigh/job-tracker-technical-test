@@ -4,6 +4,7 @@ import {
 	getCoreRowModel,
 	getPaginationRowModel,
 	useReactTable,
+	Table as ReactTable,
 } from '@tanstack/react-table';
 import {
 	Table,
@@ -128,9 +129,10 @@ export function DataTable<TData, TValue>({
  * Table pagination controls
  * By default, page size is 10
  */
-function Pagination({ table }) {
+function Pagination<T>({ table }: { table: ReactTable<T> }) {
 	return (
 		<div className="flex justify-end items-center space-x-2">
+			{/* Rows Per Page */}
 			<div className="flex items-center space-x-2">
 				<p className="text-sm font-medium">Rows per page</p>
 				<Select
@@ -152,6 +154,7 @@ function Pagination({ table }) {
 				</Select>
 			</div>
 
+			{/* Pagination */}
 			<Button
 				variant="ghost"
 				size="icon"

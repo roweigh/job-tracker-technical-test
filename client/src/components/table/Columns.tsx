@@ -1,13 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
-
-export type Application = {
-	id: string;
-	companyName: string;
-	position: string;
-	status: 'Applied' | 'Interview' | 'Offer' | 'Rejected';
-	dateApplied: string;
-};
+import { Application } from '@/api/applications';
 
 export const columns: ColumnDef<Application>[] = [
 	{
