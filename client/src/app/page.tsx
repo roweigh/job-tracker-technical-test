@@ -6,8 +6,9 @@ import { getApplications, Application, Pagination } from '@/api/applications';
 
 import { columns } from '@/components/table/Columns';
 import DataTable from '@/components/table/DataTable';
-import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
+import BulkUploadDialog from '@/components/dialog/BulkuploadDialog';
 import AddApplicationDialog from '@/components/dialog/AddApplicationDialog';
+import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
 
 // Fetch applications on initial page load
 function useGetApplications() {
@@ -68,15 +69,17 @@ export default function Home() {
 				<span className="mr-auto text-3xl font-bold select-none">
 					Applications
 				</span>
-				<AddApplicationDialog refresh={refreshApplications} />
-			</div>
 
-			<EditApplicationDialog
-				id={appId}
-				open={editDialog}
-				setOpen={setEditDialog}
-				refresh={refreshApplications}
-			/>
+				{/* CRUD Dialogs */}
+				<BulkUploadDialog refresh={refreshApplications} />
+				<AddApplicationDialog refresh={refreshApplications} />
+				<EditApplicationDialog
+					id={appId}
+					open={editDialog}
+					setOpen={setEditDialog}
+					refresh={refreshApplications}
+				/>
+			</div>
 
 			<DataTable
 				columns={columns}

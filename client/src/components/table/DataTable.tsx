@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Pagination } from '@/api/applications';
 
 import {
@@ -139,6 +140,24 @@ function TablePagination({
 	pagination: Pagination;
 	setPagination: (v: Pagination) => void;
 }) {
+	const lowerBound = useMemo(() => {
+		const result = (pagination.page - 1) * pagination.size + 1;
+		if (result > pagination.totalElements) {
+			return pagination.totalElements;
+		} else {
+			return result;
+		}
+	}, [pagination]);
+
+	const upperbound = useMemo(() => {
+		const result = pagination.page * pagination.size;
+		if (result > pagination.totalElements) {
+			return pagination.totalElements;
+		} else {
+			return result;
+		}
+	}, [pagination]);
+
 	return (
 		<div className="flex justify-end items-center space-x-2">
 			{/* Rows Per Page */}
@@ -147,7 +166,7 @@ function TablePagination({
 				<Select
 					value={`${pagination.size}`}
 					onValueChange={e => {
-						setPagination({ ...pagination, size: Number(e) });
+						setPagination({ ...pagination, page: 1, size: Number(e) });
 					}}
 				>
 					<SelectTrigger className="h-8 w-[70px]">
@@ -161,6 +180,10 @@ function TablePagination({
 						))}
 					</SelectContent>
 				</Select>
+
+				<p className="text-sm font-medium">
+					{lowerBound} - {upperbound} of {pagination.totalElements}
+				</p>
 			</div>
 
 			{/* Pagination controls*/}

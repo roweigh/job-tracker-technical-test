@@ -1,5 +1,4 @@
 import { get, post, put } from './api-utils';
-import { PaginationState } from '@tanstack/react-table';
 
 export type Application = {
 	id?: string;
@@ -34,4 +33,22 @@ export const addApplication = async (payload: Application) => {
 
 export const updateApplication = async (id: string, payload: Application) => {
 	return await put(`/applications/${id}`, payload);
+};
+
+export const bulkUpload = async () => {
+	const promises = [];
+	const statuses = ['Applied', 'Interview', 'Rejected', 'Offer'];
+	for (let i = 0; i < 50; i++) {
+		const j = Math.floor(Math.random() * 4);
+		const date = new Date();
+		const payload = {
+			companyName: `Company ${date.getTime()}`,
+			position: 'Software Developer',
+			status: statuses[j],
+			dateApplied: date.toISOString(),
+		};
+		promises.push(addApplication(payload));
+	}
+
+	await Promise.all(promises);
 };
