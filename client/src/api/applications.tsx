@@ -9,17 +9,17 @@ export type Application = {
 };
 
 export const getApplications = async () => {
-	get('/applications');
+	return await get('/applications');
 };
 
 export const getApplication = async (id: number) => {
-	get(`/applications/${id}`);
+	return await get(`/applications/${id}`);
 };
 
 export const addApplication = async (payload: Application) => {
-	post('/applications', payload);
+	return await post('/applications', payload);
 };
 
 export const updateApplication = async (id: number, payload: Application) => {
-	put(`/applications/${id}`, payload);
+	return await put(`/applications/${id}`, payload);
 };
