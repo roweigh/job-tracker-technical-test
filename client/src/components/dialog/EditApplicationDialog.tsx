@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { showMessage } from './Alert';
+import { handle } from '@/api/api-utils';
+import { showMessage } from '@/components/dialog/Alert';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,7 +74,7 @@ export default function EditApplicationDialog({
 			showMessage('Successfully updated!', 'success');
 			setOpen(false);
 		} catch (error) {
-			showMessage('An error occured', 'error');
+			handle(error);
 		}
 	};
 

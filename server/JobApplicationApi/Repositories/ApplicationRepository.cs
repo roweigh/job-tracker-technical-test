@@ -12,9 +12,13 @@ namespace JobApplicationApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<JobApplication>> GetAll(int page = 1, int size = 10)
+        public async Task<IEnumerable<JobApplication>> GetAll(int page, int size)
         {
+            /* https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/sort-filter-page?view=aspnetcore-9.0
+             * Use a switch statement to order by different columns
+             */
             return await _context.JobApplication
+                .OrderByDescending(item => item.dateApplied)
                 .Skip((page - 1) * size)
                 .Take(size)
                 .ToListAsync();
@@ -37,6 +41,7 @@ namespace JobApplicationApi.Repositories
             await _context.SaveChangesAsync();
         }
 
+        // Helper function used to count total elements in paginated data
         public Task<int> Count()
         {
             return _context.JobApplication.CountAsync();

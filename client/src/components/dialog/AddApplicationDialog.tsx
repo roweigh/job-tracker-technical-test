@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { showMessage } from './Alert';
+import { handle } from '@/api/api-utils';
+import { showMessage } from '@/components/dialog/Alert';
 import { addApplication } from '@/api/applications';
 
 import { Plus } from 'lucide-react';
@@ -57,7 +58,7 @@ export default function AddApplicationDialog({
 			showMessage('Successfully added!', 'success');
 			setOpen(false);
 		} catch (error) {
-			showMessage('An error occured', 'error');
+			handle(error);
 		}
 	};
 

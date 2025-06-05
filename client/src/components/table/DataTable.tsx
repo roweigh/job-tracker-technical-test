@@ -63,6 +63,7 @@ export default function DataTable<TData, TValue>({
 						{table.getHeaderGroups().map(headerGroup => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map(header => {
+									// Set the actions column to width of text
 									let className = '';
 									if (header.id === 'actions') {
 										className = 'w-[60px]';
@@ -91,6 +92,7 @@ export default function DataTable<TData, TValue>({
 									data-state={row.getIsSelected() && 'selected'}
 								>
 									{row.getVisibleCells().map(cell => {
+										// Actions column renders edit action button to open update dialog
 										if (cell.column.id === 'actions') {
 											return (
 												<td key={cell.id} className="flex justify-center">

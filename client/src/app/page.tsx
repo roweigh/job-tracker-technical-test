@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { showMessage } from '@/components/dialog/Alert';
+import { handle } from '@/api/api-utils';
 import { getApplications, Application, Pagination } from '@/api/applications';
 
 import { columns } from '@/components/table/Columns';
@@ -35,7 +35,7 @@ function useGetApplications() {
 				last: data.last,
 			});
 		} catch (error) {
-			showMessage('An error occured', 'error');
+			handle(error);
 		}
 	};
 
