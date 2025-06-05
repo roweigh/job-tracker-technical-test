@@ -26,24 +26,24 @@ import {
 
 import { updateApplication, getApplication } from '@/api/applications';
 
-import { z } from 'zod/v4';
-const Applicaiton = z.object({
-	companyName: z.string(),
-	position: z.number(),
-});
+interface EditApplicationDialogProps {
+	open: string | boolean;
+	setOpen: (v: string | boolean) => void;
+	refresh: () => Promise<void>;
+}
 
 export default function EditApplicationDialog({
-	open = 0,
-	setOpen = () => {},
-	refresh = () => {},
-}) {
+	open,
+	setOpen,
+	refresh,
+}: EditApplicationDialogProps) {
 	const [companyName, setCompanyName] = useState('');
 	const [position, setPosition] = useState('');
 	const [status, setStatus] = useState('');
 	const [dateApplied, setDateApplied] = useState('');
 
 	useEffect(() => {
-		async function fetchData(id: number) {
+		async function fetchData(id: string) {
 			await getApplication(id).then(({ data }) => {
 				setCompanyName(data.companyName);
 				setPosition(data.position);
@@ -52,10 +52,14 @@ export default function EditApplicationDialog({
 			});
 		}
 
-		open && fetchData(open);
+		if (typeof open === 'string') {
+			fetchData(open);
+		}
 	}, [open]);
 
 	const handleSubmit = async () => {
+		if (typeof open !== 'string') return;
+
 		const payload = {
 			id: open,
 			companyName,
@@ -131,7 +135,7 @@ export default function EditApplicationDialog({
 							<Button variant="outline">Cancel</Button>
 						</DialogClose>
 						<Button type="submit" onClick={handleSubmit}>
-							Add
+							Update
 						</Button>
 					</DialogFooter>
 				</DialogContent>

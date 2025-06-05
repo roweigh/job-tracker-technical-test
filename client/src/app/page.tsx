@@ -25,14 +25,14 @@ function useGetApplications() {
 
 export default function Home() {
 	const { fetchApplications, applications } = useGetApplications();
-	const [editDialog, setEditDialog] = useState<String | boolean>(false);
+	const [editDialog, setEditDialog] = useState<string | boolean>(false);
 
 	// Fetch applications after each update
 	const refreshApplications = async () => {
 		await fetchApplications();
 	};
 
-	const setEdit = (v: Application | boolean) => {
+	const setEdit = (v: boolean) => {
 		if (typeof v === 'boolean') {
 			setEditDialog(v);
 		} else {
@@ -45,7 +45,7 @@ export default function Home() {
 			<main className="mx-auto my-[60px] w-1/2 flex flex-col gap-[8px]">
 				<EditApplicationDialog
 					open={editDialog}
-					setOpen={setEdit}
+					onEdit={setEdit}
 					refresh={refreshApplications}
 				/>
 				<div className="flex">
@@ -55,7 +55,7 @@ export default function Home() {
 					<AddApplicationDialog refresh={refreshApplications} />
 				</div>
 
-				<DataTable columns={columns} data={applications} setEdit={setEdit} />
+				<DataTable columns={columns} data={applications} onEdit={setEdit} />
 			</main>
 		</div>
 	);

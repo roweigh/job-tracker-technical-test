@@ -33,13 +33,13 @@ import {
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
-	get: any;
+	onEdit: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
-	setEdit = () => {},
+	onEdit,
 }: DataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
 													<Button
 														className="cursor-pointer"
 														variant="ghost"
-														onClick={() => setEdit(cell.row.original)}
+														onClick={() => onEdit(cell.row.original)}
 													>
 														<Pencil className="h-4 w-4" />
 													</Button>

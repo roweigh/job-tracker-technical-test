@@ -19,17 +19,20 @@ export const columns: ColumnDef<Application>[] = [
 			let className = '';
 
 			switch (status) {
-				case 'Rejected':
-					className = 'bg-red-500 select-none';
+				case 'Applied':
+					className = 'bg-yellow-500 select-none w-[75px]';
 					break;
 				case 'Interview':
-					className = 'bg-amber-500 select-none';
+					className = 'bg-blue-400 select-none w-[75px]';
+					break;
+				case 'Rejected':
+					className = 'bg-red-400 select-none w-[75px]';
 					break;
 				case 'Offer':
-					className = 'bg-green-500 select-none';
+					className = 'bg-green-500 select-none w-[75px]';
 					break;
 				default:
-					className = 'select-none';
+					className = 'select-none w-[75px]';
 					break;
 			}
 			return <Badge className={className}>{status}</Badge>;

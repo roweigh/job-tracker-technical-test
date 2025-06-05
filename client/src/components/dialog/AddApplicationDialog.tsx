@@ -24,12 +24,6 @@ import {
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { z } from 'zod/v4';
-const Applicaiton = z.object({
-	companyName: z.string(),
-	position: z.number(),
-});
-
 export default function AddApplicationDialog({ refresh = async () => {} }) {
 	const [open, setOpen] = useState(false);
 
@@ -40,8 +34,8 @@ export default function AddApplicationDialog({ refresh = async () => {} }) {
 	useEffect(() => {
 		if (open) {
 			// Reset form
-			// setCompanyName('');
-			// setPosition('');
+			setCompanyName('');
+			setPosition('');
 		}
 	}, [open]);
 
@@ -49,7 +43,7 @@ export default function AddApplicationDialog({ refresh = async () => {} }) {
 		const payload = {
 			companyName,
 			position,
-			status: 'Interview',
+			status: 'Applied',
 			dateApplied: new Date().toISOString(),
 		};
 
