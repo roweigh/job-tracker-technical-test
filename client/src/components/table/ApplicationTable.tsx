@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { columns, Application } from './Columns';
 import { DataTable } from './DataTable';
 
