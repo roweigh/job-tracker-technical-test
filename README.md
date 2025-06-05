@@ -33,7 +33,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ## Assumptions made
 - The typical user would be a job searcher looking to keep track of the many job applications at various companies.
-- The application date is a readonly property - hile the user may want to update the date in case of a mistake, the timestamp a newly submitted application should give the most accurate information for that property.
+- 'dateApplied' is a readonly property - while the user may want to update the date in case of a mistake, the timestamp a newly submitted application should give the most accurate information for that property.
 - Interview/Offer/Rejected are all statuses that have resulted in a response. It is assumed that the job searcher will find need to know which jobs they have applied for, but haven't received any response yet. An status of 'Applied' will be assigned by default to represent this initial state.
 - An additional PUT operation will be required to update and save an existing record.
 
