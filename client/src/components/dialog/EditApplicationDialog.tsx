@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { handle } from '@/api/api-utils';
 import { showMessage } from '@/components/dialog/Alert';
 
+import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,12 +36,16 @@ interface EditApplicationDialogProps {
 	refresh: () => void;
 }
 
+/**
+ * Dialog for updating existing application
+ */
 export default function EditApplicationDialog({
 	id,
 	open,
 	setOpen,
 	refresh,
 }: EditApplicationDialogProps) {
+	const [loading, setloading] = useState(false);
 	const [companyName, setCompanyName] = useState('');
 	const [position, setPosition] = useState('');
 	const [status, setStatus] = useState('');
@@ -56,7 +61,10 @@ export default function EditApplicationDialog({
 			});
 		}
 
-		id && fetchData(id);
+		if (open) {
+			setloading(false);
+			id && fetchData(id);
+		}
 	}, [open]);
 
 	const handleSubmit = async () => {
@@ -69,6 +77,7 @@ export default function EditApplicationDialog({
 			dateApplied,
 		};
 		try {
+			setloading(true);
 			await updateApplication(id, payload);
 			await refresh();
 			showMessage('Successfully updated!', 'success');
@@ -136,10 +145,12 @@ export default function EditApplicationDialog({
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="outline">Cancel</Button>
+							<Button variant="outline" className="w-[100px]">
+								Cancel
+							</Button>
 						</DialogClose>
-						<Button type="submit" onClick={handleSubmit}>
-							Update
+						<Button type="submit" onClick={handleSubmit} className="w-[100px]">
+							{loading ? <Loader2Icon /> : <p>Update</p>}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

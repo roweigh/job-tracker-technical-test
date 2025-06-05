@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { showMessage } from './Alert';
 import { bulkUpload } from '@/api/applications';
 
-import { Upload } from 'lucide-react';
+import { Upload, Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -32,10 +32,18 @@ export default function AddApplicationDialog({
 }: {
 	refresh: () => void;
 }) {
+	const [loading, setloading] = useState(false);
 	const [open, setOpen] = useState(false);
+
+	useEffect(() => {
+		if (open) {
+			setloading(false);
+		}
+	}, [open]);
 
 	const handleSubmit = async () => {
 		try {
+			setloading(true);
 			await bulkUpload();
 			await refresh();
 			showMessage('Successfully added!', 'success');
@@ -70,10 +78,12 @@ export default function AddApplicationDialog({
 
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline" className="w-[100px]">
+							Cancel
+						</Button>
 					</DialogClose>
-					<Button type="submit" onClick={handleSubmit}>
-						Confirm
+					<Button type="submit" onClick={handleSubmit} className="w-[100px]">
+						{loading ? <Loader2Icon /> : <p>Confirm</p>}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

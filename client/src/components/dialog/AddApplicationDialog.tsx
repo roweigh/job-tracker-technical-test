@@ -5,7 +5,7 @@ import { handle } from '@/api/api-utils';
 import { showMessage } from '@/components/dialog/Alert';
 import { addApplication } from '@/api/applications';
 
-import { Plus } from 'lucide-react';
+import { Plus, Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,12 +26,16 @@ import {
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
 
+/**
+ * Dialog for adding a new application
+ */
 export default function AddApplicationDialog({
 	refresh,
 }: {
 	refresh: () => void;
 }) {
 	const [open, setOpen] = useState(false);
+	const [loading, setloading] = useState(false);
 
 	// User input
 	const [companyName, setCompanyName] = useState('');
@@ -42,6 +46,7 @@ export default function AddApplicationDialog({
 			// Reset form
 			setCompanyName('');
 			setPosition('');
+			setloading(false);
 		}
 	}, [open]);
 
@@ -53,6 +58,7 @@ export default function AddApplicationDialog({
 			dateApplied: new Date().toISOString(),
 		};
 		try {
+			setloading(true);
 			await addApplication(payload);
 			await refresh();
 			showMessage('Successfully added!', 'success');
@@ -108,10 +114,12 @@ export default function AddApplicationDialog({
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="outline">Cancel</Button>
+							<Button variant="outline" className="w-[100px]">
+								Cancel
+							</Button>
 						</DialogClose>
-						<Button type="submit" onClick={handleSubmit}>
-							Add
+						<Button type="submit" onClick={handleSubmit} className="w-[100px]">
+							{loading ? <Loader2Icon /> : <p>Add</p>}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

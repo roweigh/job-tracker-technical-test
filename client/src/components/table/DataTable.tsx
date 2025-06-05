@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Pagination } from '@/api/applications';
-
 import {
 	ColumnDef,
 	flexRender,
@@ -39,6 +38,10 @@ interface DataTableProps<TData, TValue> {
 	setEdit: (row: TData) => void;
 }
 
+/**
+ * Data table containing pagination data
+ * Actions column has special handlers to render button to edit row
+ */
 export default function DataTable<TData, TValue>({
 	columns,
 	data,

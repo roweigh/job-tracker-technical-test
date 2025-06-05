@@ -10,7 +10,7 @@ import BulkUploadDialog from '@/components/dialog/BulkuploadDialog';
 import AddApplicationDialog from '@/components/dialog/AddApplicationDialog';
 import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
 
-// Fetch applications on initial page load
+// Fetch applications when table paginates, then update pagination information
 function useGetApplications() {
 	const [applications, setApplications] = useState([]);
 	const [pagination, setPagination] = useState({
