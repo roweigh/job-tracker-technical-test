@@ -1,10 +1,10 @@
+import { Pagination } from '@/api/applications';
+
 import {
 	ColumnDef,
 	flexRender,
 	getCoreRowModel,
-	getPaginationRowModel,
 	useReactTable,
-	Table as ReactTable,
 } from '@tanstack/react-table';
 import {
 	Table,
@@ -33,24 +33,28 @@ import {
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
-	onEdit: (row: TData) => void;
+	pagination: Pagination;
+	setPagination: (pagination: Pagination) => void;
+	setEdit: (row: TData) => void;
 }
 
-export function DataTable<TData, TValue>({
+export default function DataTable<TData, TValue>({
 	columns,
 	data,
-	onEdit,
+	pagination,
+	setPagination,
+	setEdit,
 }: DataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(), //load client-side pagination code
+		manualPagination: true,
 	});
 
 	return (
 		<div>
-			<Pagination table={table} />
+			<TablePagination pagination={pagination} setPagination={setPagination} />
 
 			<div className="rounded-md border my-2">
 				<Table>
@@ -87,7 +91,7 @@ export function DataTable<TData, TValue>({
 													<Button
 														className="cursor-pointer"
 														variant="ghost"
-														onClick={() => onEdit(cell.row.original)}
+														onClick={() => setEdit(cell.row.original)}
 													>
 														<Pencil className="h-4 w-4" />
 													</Button>
@@ -120,29 +124,34 @@ export function DataTable<TData, TValue>({
 				</Table>
 			</div>
 
-			<Pagination table={table} />
+			<TablePagination pagination={pagination} setPagination={setPagination} />
 		</div>
 	);
 }
 
 /**
  * Table pagination controls
- * By default, page size is 10
  */
-function Pagination<T>({ table }: { table: ReactTable<T> }) {
+function TablePagination({
+	pagination,
+	setPagination,
+}: {
+	pagination: Pagination;
+	setPagination: (v: Pagination) => void;
+}) {
 	return (
 		<div className="flex justify-end items-center space-x-2">
 			{/* Rows Per Page */}
 			<div className="flex items-center space-x-2">
 				<p className="text-sm font-medium">Rows per page</p>
 				<Select
-					value={`${table.getState().pagination.pageSize}`}
-					onValueChange={value => {
-						table.setPageSize(Number(value));
+					value={`${pagination.size}`}
+					onValueChange={e => {
+						setPagination({ ...pagination, size: Number(e) });
 					}}
 				>
 					<SelectTrigger className="h-8 w-[70px]">
-						<SelectValue placeholder={table.getState().pagination.pageSize} />
+						<SelectValue placeholder={pagination.size} />
 					</SelectTrigger>
 					<SelectContent side="top">
 						{[10, 20, 25, 30, 40, 50].map(pageSize => (
@@ -159,40 +168,44 @@ function Pagination<T>({ table }: { table: ReactTable<T> }) {
 				variant="ghost"
 				size="icon"
 				className="hidden size-8 lg:flex"
-				onClick={() => table.setPageIndex(0)}
-				disabled={!table.getCanPreviousPage()}
+				onClick={() => {
+					setPagination({ ...pagination, page: 1 });
+				}}
+				disabled={pagination.first}
 			>
-				<span className="sr-only">Go to first page</span>
 				<ChevronsLeft />
 			</Button>
 			<Button
 				variant="ghost"
 				size="icon"
 				className="size-8"
-				onClick={() => table.previousPage()}
-				disabled={!table.getCanPreviousPage()}
+				onClick={() => {
+					setPagination({ ...pagination, page: pagination.page - 1 });
+				}}
+				disabled={pagination.first}
 			>
-				<span className="sr-only">Go to previous page</span>
 				<ChevronLeft />
 			</Button>
 			<Button
 				variant="ghost"
 				size="icon"
 				className="size-8"
-				onClick={() => table.nextPage()}
-				disabled={!table.getCanNextPage()}
+				onClick={() => {
+					setPagination({ ...pagination, page: pagination.page + 1 });
+				}}
+				disabled={pagination.last}
 			>
-				<span className="sr-only">Go to next page</span>
 				<ChevronRight />
 			</Button>
 			<Button
 				variant="ghost"
 				size="icon"
 				className="hidden size-8 lg:flex"
-				onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-				disabled={!table.getCanNextPage()}
+				onClick={() => {
+					setPagination({ ...pagination, page: pagination.totalPages });
+				}}
+				disabled={pagination.last}
 			>
-				<span className="sr-only">Go to last page</span>
 				<ChevronsRight />
 			</Button>
 		</div>

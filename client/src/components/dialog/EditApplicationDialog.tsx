@@ -31,7 +31,7 @@ interface EditApplicationDialogProps {
 	id: string | null;
 	open: boolean;
 	setOpen: (v: boolean) => void;
-	refresh: () => Promise<void>;
+	refresh: () => void;
 }
 
 export default function EditApplicationDialog({
@@ -116,13 +116,17 @@ export default function EditApplicationDialog({
 								}}
 							>
 								<SelectTrigger className="w-[100%]">
-									<SelectValue />
+									<SelectValue placeholder={status} />
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										<SelectItem value="Interview">Interview</SelectItem>
-										<SelectItem value="Offer">Offer</SelectItem>
-										<SelectItem value="Rejected">Rejected</SelectItem>
+										{['Applied', 'Interview', 'Offer', 'Rejected'].map(
+											value => (
+												<SelectItem key={value} value={`${value}`}>
+													{value}
+												</SelectItem>
+											)
+										)}
 									</SelectGroup>
 								</SelectContent>
 							</Select>

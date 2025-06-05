@@ -1,4 +1,5 @@
 import { get, post, put } from './api-utils';
+import { PaginationState } from '@tanstack/react-table';
 
 export type Application = {
 	id?: string;
@@ -8,8 +9,19 @@ export type Application = {
 	dateApplied: string;
 };
 
-export const getApplications = async () => {
-	return await get('/applications');
+export type Pagination = {
+	page: number;
+	size: number;
+	totalElements: number;
+	totalPages: number;
+	first: boolean;
+	last: boolean;
+};
+
+export const getApplications = async (pagination: Pagination) => {
+	return await get(
+		`/applications?page=${pagination?.page ?? 1}&size=${pagination?.size ?? 20}`
+	);
 };
 
 export const getApplication = async (id: string) => {

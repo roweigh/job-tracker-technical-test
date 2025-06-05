@@ -25,7 +25,11 @@ import {
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export default function AddApplicationDialog({ refresh = async () => {} }) {
+export default function AddApplicationDialog({
+	refresh,
+}: {
+	refresh: () => void;
+}) {
 	const [open, setOpen] = useState(false);
 
 	// User input

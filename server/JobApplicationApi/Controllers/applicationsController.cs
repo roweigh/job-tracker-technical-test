@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using JobApplicationApi.Models;
+using JobApplicationApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using JobApplicationApi.Models;
-using JobApplicationApi.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobApplicationApi.Controllers
 {
@@ -23,10 +24,27 @@ namespace JobApplicationApi.Controllers
 
         // GET: api/applications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobApplication>>> GetJobApplication()
+        public async Task<ActionResult<IEnumerable<JobApplication>>> GetJobApplication(int? page, int? size)
         {
-            var applications = await _repository.GetAll();
-            return Ok(applications);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            
+            var applications = await _repository.GetAll(pageNumber, pageSize);
+            var totalElements = await _repository.Count();
+            var totalPages = Math.Ceiling((double)totalElements / pageSize);
+            bool first = pageNumber == 1;
+            bool last = pageNumber >= totalPages;
+
+            return Ok(new
+            {
+                content = applications,
+                page = pageNumber,
+                size = pageSize,
+                totalElements,
+                totalPages,
+                first,
+                last
+            });
         }
 
         // GET: api/applications/5

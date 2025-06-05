@@ -12,9 +12,12 @@ namespace JobApplicationApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<JobApplication>> GetAll()
+        public async Task<IEnumerable<JobApplication>> GetAll(int page = 1, int size = 10)
         {
-            return await _context.JobApplication.ToListAsync();
+            return await _context.JobApplication
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync();
         }
 
         public async Task<JobApplication> Get(int id)
@@ -32,6 +35,11 @@ namespace JobApplicationApi.Repositories
         {
             _context.Entry(jobApplication).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+        }
+
+        public Task<int> Count()
+        {
+            return _context.JobApplication.CountAsync();
         }
 
         public bool Exists(int id)
