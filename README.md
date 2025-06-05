@@ -1,4 +1,4 @@
-# Roy Lin Full Stack .NET Developer Technical Test - Job Application Tracker
+# Full Stack .NET Developer Technical Test - Job Application Tracker
 
 ## Backend
 Tech stack:
