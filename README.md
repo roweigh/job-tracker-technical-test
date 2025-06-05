@@ -22,16 +22,11 @@ Tech stack:
 - Tailwind CSS
 - ESLint, Prettier
 
-Run the development server with:
+Run the development server in /client with:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
