@@ -53,11 +53,12 @@ export default function Home() {
 	}, []);
 
 	// Fetch applications after each update
-	const refreshApplications = () => {
+	const refresh = () => {
 		fetchApplications(pagination);
 		setEditDialog(false);
 	};
 
+	// Opens/closes edit application dialog
 	const setEdit = (v: Application) => {
 		setAppId(v.id ?? null);
 		setEditDialog(!!v);
@@ -71,13 +72,13 @@ export default function Home() {
 				</span>
 
 				{/* CRUD Dialogs */}
-				<BulkUploadDialog refresh={refreshApplications} />
-				<AddApplicationDialog refresh={refreshApplications} />
+				<BulkUploadDialog refresh={refresh} />
+				<AddApplicationDialog refresh={refresh} />
 				<EditApplicationDialog
 					id={appId}
 					open={editDialog}
 					setOpen={setEditDialog}
-					refresh={refreshApplications}
+					refresh={refresh}
 				/>
 			</div>
 

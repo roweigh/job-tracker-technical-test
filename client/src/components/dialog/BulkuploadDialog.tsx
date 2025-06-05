@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { handle } from '@/api/api-utils';
 import { showMessage } from './Alert';
 import { bulkUpload } from '@/api/applications';
 
@@ -36,9 +37,7 @@ export default function AddApplicationDialog({
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
-		if (open) {
-			setloading(false);
-		}
+		open && setloading(false);
 	}, [open]);
 
 	const handleSubmit = async () => {
@@ -49,7 +48,7 @@ export default function AddApplicationDialog({
 			showMessage('Successfully added!', 'success');
 			setOpen(false);
 		} catch (error) {
-			showMessage('An error occured', 'error');
+			handle(error);
 		}
 	};
 

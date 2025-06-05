@@ -39,7 +39,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 /**
- * Data table containing pagination data
+ * Data table containing paginated data
  * Actions column has special handlers to render button to edit row
  */
 export default function DataTable<TData, TValue>({
