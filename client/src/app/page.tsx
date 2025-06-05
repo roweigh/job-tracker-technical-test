@@ -40,7 +40,7 @@ export default function Home() {
 	};
 
 	return (
-		<main className="mx-auto my-[60px] w-1/2 flex flex-col gap-[8px]">
+		<main className="min-w-2xs mx-[5%] my-[40px] lg:mx-auto lg:my-[60px] lg:w-1/2 flex flex-col gap-[8px]">
 			<EditApplicationDialog
 				id={appId}
 				open={editDialog}
