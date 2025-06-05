@@ -46,7 +46,6 @@ export default function AddApplicationDialog({ refresh = async () => {} }) {
 			status: 'Applied',
 			dateApplied: new Date().toISOString(),
 		};
-
 		try {
 			await addApplication(payload);
 			await refresh();

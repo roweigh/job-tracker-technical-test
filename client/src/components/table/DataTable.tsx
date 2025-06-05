@@ -154,7 +154,7 @@ function Pagination<T>({ table }: { table: ReactTable<T> }) {
 				</Select>
 			</div>
 
-			{/* Pagination */}
+			{/* Pagination controls*/}
 			<Button
 				variant="ghost"
 				size="icon"

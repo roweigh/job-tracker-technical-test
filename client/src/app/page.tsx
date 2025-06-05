@@ -25,38 +25,36 @@ function useGetApplications() {
 
 export default function Home() {
 	const { fetchApplications, applications } = useGetApplications();
-	const [editDialog, setEditDialog] = useState<string | boolean>(false);
+	const [appId, setAppId] = useState<string | null>(null);
+	const [editDialog, setEditDialog] = useState<boolean>(false);
 
 	// Fetch applications after each update
 	const refreshApplications = async () => {
 		await fetchApplications();
+		setEditDialog(false);
 	};
 
-	const setEdit = (v: boolean) => {
-		if (typeof v === 'boolean') {
-			setEditDialog(v);
-		} else {
-			setEditDialog(v.id);
-		}
+	const setEdit = (v: Application) => {
+		setAppId(v.id ?? null);
+		setEditDialog(!!v);
 	};
 
 	return (
-		<div className="font-[family-name:var(--font-geist-sans)]">
-			<main className="mx-auto my-[60px] w-1/2 flex flex-col gap-[8px]">
-				<EditApplicationDialog
-					open={editDialog}
-					onEdit={setEdit}
-					refresh={refreshApplications}
-				/>
-				<div className="flex">
-					<span className="mr-auto text-3xl font-bold select-none">
-						Applications
-					</span>
-					<AddApplicationDialog refresh={refreshApplications} />
-				</div>
+		<main className="mx-auto my-[60px] w-1/2 flex flex-col gap-[8px]">
+			<EditApplicationDialog
+				id={appId}
+				open={editDialog}
+				setOpen={setEditDialog}
+				refresh={refreshApplications}
+			/>
+			<div className="flex">
+				<span className="mr-auto text-3xl font-bold select-none">
+					Applications
+				</span>
+				<AddApplicationDialog refresh={refreshApplications} />
+			</div>
 
-				<DataTable columns={columns} data={applications} onEdit={setEdit} />
-			</main>
-		</div>
+			<DataTable columns={columns} data={applications} onEdit={setEdit} />
+		</main>
 	);
 }

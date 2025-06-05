@@ -27,12 +27,14 @@ import {
 import { updateApplication, getApplication } from '@/api/applications';
 
 interface EditApplicationDialogProps {
-	open: string | boolean;
-	setOpen: (v: string | boolean) => void;
+	id: string | null;
+	open: boolean;
+	setOpen: (v: boolean) => void;
 	refresh: () => Promise<void>;
 }
 
 export default function EditApplicationDialog({
+	id,
 	open,
 	setOpen,
 	refresh,
@@ -52,23 +54,20 @@ export default function EditApplicationDialog({
 			});
 		}
 
-		if (typeof open === 'string') {
-			fetchData(open);
-		}
+		id && fetchData(id);
 	}, [open]);
 
 	const handleSubmit = async () => {
-		if (typeof open !== 'string') return;
-
+		if (!id) return;
 		const payload = {
-			id: open,
+			id: id,
 			companyName,
 			position,
 			status,
 			dateApplied,
 		};
 		try {
-			await updateApplication(open, payload);
+			await updateApplication(id, payload);
 			await refresh();
 			setOpen(false);
 		} catch (error) {
