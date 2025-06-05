@@ -63,8 +63,13 @@ export default function DataTable<TData, TValue>({
 						{table.getHeaderGroups().map(headerGroup => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map(header => {
+									let className = '';
+									if (header.id === 'actions') {
+										className = 'w-[60px]';
+									}
+
 									return (
-										<TableHead key={header.id}>
+										<TableHead className={className} key={header.id}>
 											{header.isPlaceholder
 												? null
 												: flexRender(
