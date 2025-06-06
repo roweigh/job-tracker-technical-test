@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/tooltip';
 
 /**
- * Confirm cancel dialog to sent 50 randomly generated applications to the backend
+ * Confirm cancel dialog to send 50 randomly generated applications to the backend
  * Used to test pagination, could consider creating an endpoint to accept a collection of applications to reduce overhead costs of performing 50 POST requests
  */
 export default function AddApplicationDialog({
