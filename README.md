@@ -19,6 +19,7 @@ Tech stack:
 - React/Next.js
 - Axios
 - Shadcn UI component library
+- Zod (Form validation)
 - Tailwind CSS
 - ESLint, Prettier
 
