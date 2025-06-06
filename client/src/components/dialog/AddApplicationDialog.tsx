@@ -67,7 +67,6 @@ export default function AddApplicationDialog({
     if (open) {
       setloading(false);
       form.reset();
-      // form.setValue('companyName', 'yeet');
     }
   }, [open]);
 
