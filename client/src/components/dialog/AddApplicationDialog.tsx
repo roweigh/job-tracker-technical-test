@@ -10,120 +10,120 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from '@/components/ui/dialog';
 
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
 } from '@/components/ui/tooltip';
 
 /**
  * Dialog for adding a new application
  */
 export default function AddApplicationDialog({
-	refresh,
+  refresh
 }: {
-	refresh: () => void;
+  refresh: () => void;
 }) {
-	const [open, setOpen] = useState(false);
-	const [loading, setloading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [loading, setloading] = useState(false);
 
-	// User input
-	const [companyName, setCompanyName] = useState('');
-	const [position, setPosition] = useState('');
+  // User input
+  const [companyName, setCompanyName] = useState('');
+  const [position, setPosition] = useState('');
 
-	useEffect(() => {
-		if (open) {
-			// Reset form
-			setCompanyName('');
-			setPosition('');
-			setloading(false);
-		}
-	}, [open]);
+  useEffect(() => {
+    if (open) {
+      // Reset form
+      setCompanyName('');
+      setPosition('');
+      setloading(false);
+    }
+  }, [open]);
 
-	const handleSubmit = async () => {
-		const payload = {
-			companyName,
-			position,
-			status: 'Applied',
-			dateApplied: new Date().toISOString(),
-		};
-		try {
-			setloading(true);
-			await addApplication(payload);
-			await refresh();
-			showMessage('Successfully added!', 'success');
-			setOpen(false);
-		} catch (error) {
-			handle(error);
-		}
-	};
+  const handleSubmit = async () => {
+    const payload = {
+      companyName,
+      position,
+      status: 'Applied',
+      dateApplied: new Date().toISOString()
+    };
+    try {
+      setloading(true);
+      await addApplication(payload);
+      await refresh();
+      showMessage('Successfully added!', 'success');
+      setOpen(false);
+    } catch (error) {
+      handle(error);
+    }
+  };
 
-	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<form>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<DialogTrigger asChild>
-							<Button className="cursor-pointer" variant="ghost">
-								<Plus className="h-4 w-4" />
-							</Button>
-						</DialogTrigger>
-					</TooltipTrigger>
-					<TooltipContent>
-						<p>Add</p>
-					</TooltipContent>
-				</Tooltip>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <form>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button className="cursor-pointer" variant="ghost">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Add</p>
+          </TooltipContent>
+        </Tooltip>
 
-				<DialogContent className="sm:max-w-[425px]">
-					<DialogHeader>
-						<DialogTitle>Add new application</DialogTitle>
-						<DialogDescription />
-					</DialogHeader>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add new application</DialogTitle>
+            <DialogDescription />
+          </DialogHeader>
 
-					<div className="grid gap-4">
-						<div className="grid gap-2">
-							<Label>Company Name</Label>
-							<Input
-								value={companyName}
-								onChange={e => {
-									setCompanyName(e.target.value);
-								}}
-							/>
-						</div>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label>Company Name</Label>
+              <Input
+                value={companyName}
+                onChange={e => {
+                  setCompanyName(e.target.value);
+                }}
+              />
+            </div>
 
-						<div className="grid gap-2">
-							<Label>Position</Label>
-							<Input
-								value={position}
-								onChange={e => {
-									setPosition(e.target.value);
-								}}
-							/>
-						</div>
-					</div>
+            <div className="grid gap-2">
+              <Label>Position</Label>
+              <Input
+                value={position}
+                onChange={e => {
+                  setPosition(e.target.value);
+                }}
+              />
+            </div>
+          </div>
 
-					<DialogFooter>
-						<DialogClose asChild>
-							<Button variant="outline" className="w-[100px]">
-								Cancel
-							</Button>
-						</DialogClose>
-						<Button type="submit" onClick={handleSubmit} className="w-[100px]">
-							{loading ? <Loader2Icon /> : <p>Add</p>}
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</form>
-		</Dialog>
-	);
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="w-[100px]">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" onClick={handleSubmit} className="w-[100px]">
+              {loading ? <Loader2Icon /> : <p>Add</p>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
+  );
 }
