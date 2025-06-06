@@ -19,9 +19,7 @@ export default defineConfig([
       '@stylistic/indent': ['error', 2],
       '@stylistic/semi': ['warn', 'always'],
       '@stylistic/comma-dangle': ['warn', 'never'],
-      '@stylistic/quotes': ['warn', 'single'],
-      '@typescript-eslint/no-explicit-any': 'never'
-
+      '@stylistic/quotes': ['warn', 'single']
     }
   }
 ]);

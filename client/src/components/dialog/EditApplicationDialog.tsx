@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handle } from '@/api/api-utils';
 import { showMessage } from '@/components/dialog/Alert';
+import { updateApplication, getApplication } from '@/api/applications';
 
 import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,26 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-import { updateApplication, getApplication } from '@/api/applications';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+
+const FormSchema = z.object({
+  companyName: z.string()
+    .min(1, { message: 'Required' })
+    .max(255, { message:' Max length 255 characters' }),
+  position: z.string()
+    .min(1, { message: 'Required' })
+    .max(255, { message:' Max length 255 characters' })
+});
 
 interface EditApplicationDialogProps {
   id: string | null;
@@ -46,16 +65,22 @@ export default function EditApplicationDialog({
   refresh
 }: EditApplicationDialogProps) {
   const [loading, setloading] = useState(false);
-  const [companyName, setCompanyName] = useState('');
-  const [position, setPosition] = useState('');
   const [status, setStatus] = useState('');
   const [dateApplied, setDateApplied] = useState('');
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      companyName: '',
+      position: ''
+    }
+  });
 
   useEffect(() => {
     async function fetchData(id: string) {
       await getApplication(id).then(({ data }) => {
-        setCompanyName(data.companyName);
-        setPosition(data.position);
+        form.setValue('companyName', data.companyName);
+        form.setValue('position', data.position);
         setStatus(data.status);
         setDateApplied(data.dateApplied);
       });
@@ -63,18 +88,18 @@ export default function EditApplicationDialog({
 
     if (open) {
       setloading(false);
-      if (typeof id === 'string'){
+      if (typeof id === 'number'){
         fetchData(id);
       }
     }
   }, [open]);
 
-  const handleSubmit = async () => {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!id) return;
     const payload = {
       id: id,
-      companyName,
-      position,
+      companyName: data.companyName,
+      position: data.position,
       status,
       dateApplied
     };
@@ -91,33 +116,40 @@ export default function EditApplicationDialog({
 
   return (
     <Dialog open={!!open} onOpenChange={setOpen}>
-      <form>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit application</DialogTitle>
-            <DialogDescription />
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit application</DialogTitle>
+          <DialogDescription />
+        </DialogHeader>
 
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label>Company Name</Label>
-              <Input
-                value={companyName}
-                onChange={e => {
-                  setCompanyName(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label>Position</Label>
-              <Input
-                value={position}
-                onChange={e => {
-                  setPosition(e.target.value);
-                }}
-              />
-            </div>
+        <Form {...form}>
+          <form className="flex flex-col gap-[16px]">
+            <FormField
+              control={form.control}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="position"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Position</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid gap-2">
               <Label>Status</Label>
@@ -143,20 +175,20 @@ export default function EditApplicationDialog({
                 </SelectContent>
               </Select>
             </div>
-          </div>
+          </form>
+        </Form>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" className="w-[100px]">
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button type="submit" onClick={handleSubmit} className="w-[100px]">
-              {loading ? <Loader2Icon /> : <p>Update</p>}
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline" className="w-[100px]">
+              Cancel
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button type="submit" onClick={form.handleSubmit(onSubmit)} className="w-[100px]">
+            {loading ? <Loader2Icon /> : <p>Update</p>}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }
