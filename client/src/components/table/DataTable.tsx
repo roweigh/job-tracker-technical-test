@@ -38,7 +38,7 @@ interface DataTableProps<TData, TValue> {
   pagination: Pagination;
   sorting: SortingState,
   setEdit: (row: TData) => void;
-  setPagination: (pagination: Pagination) => void;
+  onPagination: (pagination: Pagination) => void;
   onSortingChange: (updater: SetStateAction<SortingState>) => void;
 }
 
@@ -51,7 +51,7 @@ export default function DataTable<TData, TValue>({
   data,
   setEdit,
   pagination,
-  setPagination,
+  onPagination,
   sorting,
   onSortingChange
 }: DataTableProps<TData, TValue>) {
@@ -68,7 +68,7 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div>
-      <TablePagination pagination={pagination} setPagination={setPagination} />
+      <TablePagination pagination={pagination} onPagination={onPagination} />
 
       <div className="rounded-md border my-2">
         <Table>
@@ -145,7 +145,7 @@ export default function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <TablePagination pagination={pagination} setPagination={setPagination} />
+      <TablePagination pagination={pagination} onPagination={onPagination} />
     </div>
   );
 }
@@ -155,10 +155,10 @@ export default function DataTable<TData, TValue>({
  */
 function TablePagination({
   pagination,
-  setPagination
+  onPagination
 }: {
   pagination: Pagination;
-  setPagination: (v: Pagination) => void;
+  onPagination: (v: Pagination) => void;
 }) {
   const lowerBound = useMemo(() => {
     const result = (pagination.page - 1) * pagination.size + 1;
@@ -186,7 +186,7 @@ function TablePagination({
         <Select
           value={`${pagination.size}`}
           onValueChange={e => {
-            setPagination({ ...pagination, page: 1, size: Number(e) });
+            onPagination({ ...pagination, page: 1, size: Number(e) });
           }}
         >
           <SelectTrigger className="h-8 w-[70px]">
@@ -212,7 +212,7 @@ function TablePagination({
         size="icon"
         className="hidden size-8 lg:flex"
         onClick={() => {
-          setPagination({ ...pagination, page: 1 });
+          onPagination({ ...pagination, page: 1 });
         }}
         disabled={pagination.first}
       >
@@ -223,7 +223,7 @@ function TablePagination({
         size="icon"
         className="size-8"
         onClick={() => {
-          setPagination({ ...pagination, page: pagination.page - 1 });
+          onPagination({ ...pagination, page: pagination.page - 1 });
         }}
         disabled={pagination.first}
       >
@@ -234,7 +234,7 @@ function TablePagination({
         size="icon"
         className="size-8"
         onClick={() => {
-          setPagination({ ...pagination, page: pagination.page + 1 });
+          onPagination({ ...pagination, page: pagination.page + 1 });
         }}
         disabled={pagination.last}
       >
@@ -245,7 +245,7 @@ function TablePagination({
         size="icon"
         className="hidden size-8 lg:flex"
         onClick={() => {
-          setPagination({ ...pagination, page: pagination.totalPages });
+          onPagination({ ...pagination, page: pagination.totalPages });
         }}
         disabled={pagination.last}
       >

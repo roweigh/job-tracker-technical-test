@@ -15,24 +15,33 @@ import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
 // Fetch applications when table paginates, then update pagination information
 function useGetApplications() {
   const [applications, setApplications] = useState([]);
+  const [paginated, setPaginated] = useState<Pagination>({
+    page: 1,
+    size: 20,
+    totalElements: 0,
+    totalPages: 1,
+    first: true,
+    last: true
+  });
 
   const fetchApplications = async (pagination: Pagination, sortBy: SortingState) => {
     try {
       const { data } = await getApplications(pagination, sortBy);
-      setApplications(data);
+      setApplications(data.content);
+      setPaginated(data.pagination);
     } catch (error) {
       handle(error);
     }
   };
 
-  return { fetchApplications, applications };
+  return { fetchApplications, applications, paginated };
 }
 
 export default function Home() {
   const [appId, setAppId] = useState<string | null>(null);
   const [editDialog, setEditDialog] = useState<boolean>(false);
 
-  const { fetchApplications, applications } = useGetApplications();
+  const { fetchApplications, applications, paginated } = useGetApplications();
   const [sortBy, setSortBy] = useState<SortingState>([{id: 'dateApplied', desc: true}]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -81,8 +90,8 @@ export default function Home() {
         columns={columns}
         data={applications}
         setEdit={setEdit}
-        pagination={pagination}
-        setPagination={setPagination}
+        pagination={paginated}
+        onPagination={setPagination}
         sorting={sortBy}
         onSortingChange={setSortBy}
       />

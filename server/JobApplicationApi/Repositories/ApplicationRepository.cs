@@ -1,5 +1,5 @@
-﻿using JobApplicationApi.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using JobApplicationApi.Models;
 
 namespace JobApplicationApi.Repositories
 {

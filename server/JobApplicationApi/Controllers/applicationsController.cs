@@ -1,13 +1,8 @@
-﻿using JobApplicationApi.Models;
-using JobApplicationApi.Repositories;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Threading.Tasks;
+using JobApplicationApi.Models;
+using JobApplicationApi.Repositories;
+using JobApplicationApi.DTO;
 
 namespace JobApplicationApi.Controllers
 {
@@ -24,7 +19,7 @@ namespace JobApplicationApi.Controllers
 
         // GET: api/applications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobApplication>>> GetJobApplication(int? page, int? size, string?  sortBy, string? sortDesc)
+        public async Task<ActionResult<PaginatedDTO<JobApplication>>> GetJobApplication(int? page, int? size, string? sortBy, string? sortDesc)
         {
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
@@ -33,11 +28,25 @@ namespace JobApplicationApi.Controllers
             
             var applications = await _repository.GetAll(pageNumber, pageSize, sort, order);
             var totalElements = await _repository.Count();
-            var totalPages = Math.Ceiling((double)totalElements / pageSize);
+            var totalPages = (int)Math.Ceiling((double)totalElements / pageSize);
             bool first = pageNumber == 1;
             bool last = pageNumber >= totalPages;
 
-            return Ok(applications);
+            var response = new PaginatedDTO<JobApplication>
+            {
+                content =  applications,
+                pagination = new PaginationDTO
+                {
+                    page = pageNumber,
+                    size = pageSize,
+                    totalElements = totalElements,
+                    totalPages = totalPages,
+                    first = pageNumber == 1,
+                    last = pageNumber >= totalPages
+                }
+            };
+
+            return Ok(response);
         }
 
         // GET: api/applications/5
