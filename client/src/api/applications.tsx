@@ -1,5 +1,5 @@
 import { get, post, put } from './api-utils';
-import { SortingState } from '@tanstack/react-table';
+import { SortingState, ColumnFiltersState } from '@tanstack/react-table';
 
 export type Application = {
   id?: string;
@@ -18,10 +18,18 @@ export type Pagination = {
   last: boolean;
 };
 
-export const getApplications = async (pagination: Pagination, sorting: SortingState) => {
+export const getApplications = async (pagination: Pagination, sorting: SortingState, statuses: ColumnFiltersState) => {
   const sortBy = sorting[0]?.id ?? undefined;
   const sortDesc = sorting[0]?.desc  ? 'true' : 'false';
-  return await get(`/applications?page=${pagination?.page ?? 1}&size=${pagination?.size ?? 20}&sortBy=${sortBy}&sortDesc=${sortDesc}`);
+  const statusQuery = Array.isArray(statuses[0]?.value) ? statuses[0].value.join(',') : '';
+  
+  const query = [] as string[];
+  if (statusQuery) {
+    query.push(`status=${statusQuery}`);
+  }
+  query.push(`page=${pagination?.page ?? 1}&size=${pagination?.size ?? 20}&sortBy=${sortBy}&sortDesc=${sortDesc}`);
+
+  return await get(`/applications?${query.join('&')}`);
 };
 
 export const getApplication = async (id: string) => {

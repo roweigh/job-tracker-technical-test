@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Pagination } from '@/api/applications';
 import {
   ColumnDef,
+  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -37,9 +38,11 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   pagination: Pagination;
   sorting: SortingState,
+  columnFilters: ColumnFiltersState,
   setEdit: (row: TData) => void;
   onPagination: (pagination: Pagination) => void;
   onSortingChange: (updater: SetStateAction<SortingState>) => void;
+  onColumnFiltersChange: (updater: SetStateAction<ColumnFiltersState>) => void;
 }
 
 /**
@@ -53,16 +56,21 @@ export default function DataTable<TData, TValue>({
   pagination,
   onPagination,
   sorting,
-  onSortingChange
+  onSortingChange,
+  columnFilters,
+  onColumnFiltersChange
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     onSortingChange,
+    onColumnFiltersChange,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
+    manualFiltering: true,
     state: {
-      sorting
+      sorting,
+      columnFilters
     }
   });
 

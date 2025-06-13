@@ -1,13 +1,22 @@
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Badge } from '@/components/ui/badge';
 import { Application } from '@/api/applications';
-import { Button } from '@/components/ui/button';
+
 import {
   ChevronUp,
   ChevronDown,
   ChevronsUpDown
 } from 'lucide-react';
+
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger
+} from '@/components/ui/hover-card';
 
 // Define table columns
 export const columns: ColumnDef<Application>[] = [
@@ -55,19 +64,53 @@ export const columns: ColumnDef<Application>[] = [
     accessorKey: 'status',
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        <HoverCard 
+          openDelay={200}
+          closeDelay={200}
         >
-          Status
-          {column.getIsSorted() === 'asc' ? (
-            <ChevronUp />
-          ) :  column.getIsSorted() === 'desc' ? (
-            <ChevronDown />
-          ) : (
-            <ChevronsUpDown />
-          )}
-        </Button>
+          <HoverCardTrigger>
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            >
+              Status
+              {column.getIsSorted() === 'asc' ? (
+                <ChevronUp />
+              ) :  column.getIsSorted() === 'desc' ? (
+                <ChevronDown />
+              ) : (
+                <ChevronsUpDown />
+              )}
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent 
+            sideOffset={10}
+            align={'start'} className="flex flex-col gap-[16px]">
+            {['Applied', 'Interview', 'Offer', 'Rejected'].map(
+              value => {
+                const filterValue = column.getFilterValue() as string[] | undefined;
+                const filterSet = new Set(filterValue ?? []);
+
+                return (
+                  <div key={value} className="flex gap-[8px]">
+                    <Checkbox 
+                      checked={filterSet.has(value)}
+                      onCheckedChange={(v) => {
+                        if (v) {
+                          filterSet.add(value);
+                        } else {
+                          filterSet.delete(value);
+                        }
+                        column.setFilterValue([...filterSet]);
+                      }}
+                    />
+                    <Label>{value}</Label>
+                  </div>
+                );
+              }
+            )}
+          </HoverCardContent>
+        </HoverCard>
       );
     },
     cell: ({ row }) => {

@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { SortingState } from '@tanstack/react-table';
+import { SortingState, 
+  ColumnFiltersState
+} from '@tanstack/react-table';
 import { columns } from '@/components/table/Columns';
 
 import { handle } from '@/api/api-utils';
@@ -24,9 +26,9 @@ function useGetApplications() {
     last: true
   });
 
-  const fetchApplications = async (pagination: Pagination, sortBy: SortingState) => {
+  const fetchApplications = async (pagination: Pagination, sortBy: SortingState, statuses: ColumnFiltersState) => {
     try {
-      const { data } = await getApplications(pagination, sortBy);
+      const { data } = await getApplications(pagination, sortBy, statuses);
       setApplications(data.content);
       setPaginated(data.pagination);
     } catch (error) {
@@ -44,6 +46,7 @@ export default function Home() {
 
   // Paginated query data
   const { fetchApplications, applications, paginated } = useGetApplications();
+  const [statuses, setStatuses] = useState<ColumnFiltersState>([{id: 'status', value: []}]);
   const [sortBy, setSortBy] = useState<SortingState>([{id: 'dateApplied', desc: true}]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -56,12 +59,12 @@ export default function Home() {
 
   // Fetch applications on paginaton/sort
   useEffect(() => {
-    fetchApplications(pagination, sortBy);
-  }, [sortBy, pagination]);
+    fetchApplications(pagination, sortBy, statuses);
+  }, [sortBy, pagination, statuses]);
 
   // Fetch applications after each update
   const refresh = () => {
-    fetchApplications(pagination, sortBy);
+    fetchApplications(pagination, sortBy, statuses);
     setEditDialog(false);
   };
 
@@ -89,6 +92,7 @@ export default function Home() {
         />
       </div>
 
+      {JSON.stringify(statuses)}
       <DataTable
         columns={columns}
         data={applications}
@@ -97,6 +101,8 @@ export default function Home() {
         onPagination={setPagination}
         sorting={sortBy}
         onSortingChange={setSortBy}
+        columnFilters={statuses}
+        onColumnFiltersChange={setStatuses}
       />
     </main>
   );
