@@ -38,9 +38,11 @@ function useGetApplications() {
 }
 
 export default function Home() {
+  // CRUD Overlays
   const [appId, setAppId] = useState<string | null>(null);
   const [editDialog, setEditDialog] = useState<boolean>(false);
 
+  // Paginated query data
   const { fetchApplications, applications, paginated } = useGetApplications();
   const [sortBy, setSortBy] = useState<SortingState>([{id: 'dateApplied', desc: true}]);
   const [pagination, setPagination] = useState({
@@ -52,6 +54,7 @@ export default function Home() {
     last: true
   });
 
+  // Fetch applications on paginaton/sort
   useEffect(() => {
     fetchApplications(pagination, sortBy);
   }, [sortBy, pagination]);
