@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { SortingState } from '@tanstack/react-table';
+import { columns } from '@/components/table/Columns';
+
 import { handle } from '@/api/api-utils';
 import { getApplications, Application, Pagination } from '@/api/applications';
 
-import { columns } from '@/components/table/Columns';
 import DataTable from '@/components/table/DataTable';
 import BulkUploadDialog from '@/components/dialog/BulkuploadDialog';
 import AddApplicationDialog from '@/components/dialog/AddApplicationDialog';
@@ -13,6 +15,25 @@ import EditApplicationDialog from '@/components/dialog/EditApplicationDialog';
 // Fetch applications when table paginates, then update pagination information
 function useGetApplications() {
   const [applications, setApplications] = useState([]);
+
+  const fetchApplications = async (pagination: Pagination, sortBy: SortingState) => {
+    try {
+      const { data } = await getApplications(pagination, sortBy);
+      setApplications(data);
+    } catch (error) {
+      handle(error);
+    }
+  };
+
+  return { fetchApplications, applications };
+}
+
+export default function Home() {
+  const [appId, setAppId] = useState<string | null>(null);
+  const [editDialog, setEditDialog] = useState<boolean>(false);
+
+  const { fetchApplications, applications } = useGetApplications();
+  const [sortBy, setSortBy] = useState<SortingState>([{id: 'dateApplied', desc: true}]);
   const [pagination, setPagination] = useState({
     page: 1,
     size: 20,
@@ -22,39 +43,13 @@ function useGetApplications() {
     last: true
   });
 
-  const fetchApplications = async (pagination: Pagination) => {
-    try {
-      const { data } = await getApplications(pagination);
-      setApplications(data.content);
-      setPagination({
-        page: data.page,
-        size: data.size,
-        totalElements: data.totalElements,
-        totalPages: data.totalPages,
-        first: data.first,
-        last: data.last
-      });
-    } catch (error) {
-      handle(error);
-    }
-  };
-
-  return { fetchApplications, applications, pagination };
-}
-
-export default function Home() {
-  const [appId, setAppId] = useState<string | null>(null);
-  const [editDialog, setEditDialog] = useState<boolean>(false);
-
-  const { fetchApplications, applications, pagination } = useGetApplications();
-
   useEffect(() => {
-    fetchApplications(pagination);
-  }, []);
+    fetchApplications(pagination, sortBy);
+  }, [sortBy, pagination]);
 
   // Fetch applications after each update
   const refresh = () => {
-    fetchApplications(pagination);
+    fetchApplications(pagination, sortBy);
     setEditDialog(false);
   };
 
@@ -85,9 +80,11 @@ export default function Home() {
       <DataTable
         columns={columns}
         data={applications}
-        pagination={pagination}
-        setPagination={fetchApplications}
         setEdit={setEdit}
+        pagination={pagination}
+        setPagination={setPagination}
+        sorting={sortBy}
+        onSortingChange={setSortBy}
       />
     </main>
   );

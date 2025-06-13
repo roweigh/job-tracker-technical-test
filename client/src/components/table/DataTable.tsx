@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { useMemo } from 'react';
 import { Pagination } from '@/api/applications';
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable
@@ -35,8 +36,10 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination: Pagination;
-  setPagination: (pagination: Pagination) => void;
+  sorting: SortingState,
   setEdit: (row: TData) => void;
+  setPagination: (pagination: Pagination) => void;
+  onSortingChange: (updater: SetStateAction<SortingState>) => void;
 }
 
 /**
@@ -46,15 +49,21 @@ interface DataTableProps<TData, TValue> {
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  setEdit,
   pagination,
   setPagination,
-  setEdit
+  sorting,
+  onSortingChange
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
+    onSortingChange,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true
+    manualPagination: true,
+    state: {
+      sorting
+    }
   });
 
   return (

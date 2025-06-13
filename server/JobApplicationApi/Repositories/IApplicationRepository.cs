@@ -4,7 +4,7 @@ namespace JobApplicationApi.Repositories
 {
     public interface IApplicationRepository
     {
-        Task<IEnumerable<JobApplication>> GetAll(int page, int size);
+        Task<IEnumerable<JobApplication>> GetAll(int page, int size, string sort, string order);
         Task<JobApplication> Get(int id);
         Task Post(JobApplication jobApplication);
         Task Put(int id, JobApplication jobApplication);

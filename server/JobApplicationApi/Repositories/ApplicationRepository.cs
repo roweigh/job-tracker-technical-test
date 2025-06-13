@@ -1,4 +1,5 @@
 ﻿using JobApplicationApi.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobApplicationApi.Repositories
@@ -12,16 +13,32 @@ namespace JobApplicationApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<JobApplication>> GetAll(int page, int size)
+        public async Task<IEnumerable<JobApplication>> GetAll(int page, int size, string sort, string order)
         {
-            /* https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/sort-filter-page?view=aspnetcore-9.0
-             * Use a switch statement to order by different columns
-             */
-            return await _context.JobApplication
-                .OrderByDescending(item => item.dateApplied)
-                .Skip((page - 1) * size)
-                .Take(size)
-                .ToListAsync();
+            IQueryable<JobApplication> items = _context.JobApplication;
+            switch (sort)
+            {
+                case "companyName":
+                    items = order == "desc" ? items.OrderByDescending(item => item.companyName) : items.OrderBy(item => item.companyName);
+                    break;
+                case "position":
+                    items = order == "desc" ? items.OrderByDescending(item => item.position) : items.OrderBy(item => item.position);
+                    break;
+                case "status":
+                    items = order == "desc" ? items.OrderByDescending(item => item.status) : items.OrderBy(item => item.status);
+                    break;
+                case "dateApplied":
+                    items = order == "desc" ? items.OrderByDescending(item => item.dateApplied) : items.OrderBy(item => item.dateApplied);
+                    break;
+                default:
+                    items = items.OrderByDescending(item => item.dateApplied);
+                    break;
+            }
+
+            return await items
+                    .Skip((page - 1) * size)
+                    .Take(size)
+                    .ToListAsync();
         }
 
         public async Task<JobApplication> Get(int id)

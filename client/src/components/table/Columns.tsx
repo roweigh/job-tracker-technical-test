@@ -2,27 +2,97 @@ import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Application } from '@/api/applications';
+import { Button } from '@/components/ui/button';
+import {
+  ChevronUp,
+  ChevronDown,
+  ChevronsUpDown
+} from 'lucide-react';
 
 // Define table columns
 export const columns: ColumnDef<Application>[] = [
   {
     accessorKey: 'companyName',
-    header: 'Company Name'
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Company Name
+          {column.getIsSorted() === 'asc' ? (
+            <ChevronUp />
+          ) :  column.getIsSorted() === 'desc' ? (
+            <ChevronDown />
+          ) : (
+            <ChevronsUpDown />
+          )}
+        </Button>
+      );
+    }
   },
   {
     accessorKey: 'position',
-    header: 'Position'
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Position
+          {column.getIsSorted() === 'asc' ? (
+            <ChevronUp />
+          ) :  column.getIsSorted() === 'desc' ? (
+            <ChevronDown />
+          ) : (
+            <ChevronsUpDown />
+          )}
+        </Button>
+      );
+    }
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Status
+          {column.getIsSorted() === 'asc' ? (
+            <ChevronUp />
+          ) :  column.getIsSorted() === 'desc' ? (
+            <ChevronDown />
+          ) : (
+            <ChevronsUpDown />
+          )}
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return <Status status={row.original.status} />;
     }
   },
   {
     accessorKey: 'dateApplied',
-    header: 'Date Applied',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Date Applied
+          {column.getIsSorted() === 'asc' ? (
+            <ChevronUp />
+          ) :  column.getIsSorted() === 'desc' ? (
+            <ChevronDown />
+          ) : (
+            <ChevronsUpDown />
+          )}
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return <span>{generateDateTime(row.original.dateApplied)}</span>;
     }

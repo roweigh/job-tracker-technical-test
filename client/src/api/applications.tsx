@@ -1,4 +1,5 @@
 import { get, post, put } from './api-utils';
+import { SortingState } from '@tanstack/react-table';
 
 export type Application = {
   id?: string;
@@ -17,10 +18,10 @@ export type Pagination = {
   last: boolean;
 };
 
-export const getApplications = async (pagination: Pagination) => {
-  return await get(
-    `/applications?page=${pagination?.page ?? 1}&size=${pagination?.size ?? 20}`
-  );
+export const getApplications = async (pagination: Pagination, sorting: SortingState) => {
+  const sortBy = sorting[0]?.id ?? undefined;
+  const sortDesc = sorting[0]?.desc  ? 'true' : 'false';
+  return await get(`/applications?page=${pagination?.page ?? 1}&size=${pagination?.size ?? 20}&sortBy=${sortBy}&sortDesc=${sortDesc}`);
 };
 
 export const getApplication = async (id: string) => {

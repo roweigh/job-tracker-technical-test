@@ -24,27 +24,20 @@ namespace JobApplicationApi.Controllers
 
         // GET: api/applications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobApplication>>> GetJobApplication(int? page, int? size)
+        public async Task<ActionResult<IEnumerable<JobApplication>>> GetJobApplication(int? page, int? size, string?  sortBy, string? sortDesc)
         {
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
+            string sort = sortBy ?? "dateApplied";
+            string order = sortDesc == "true" ? "desc" : "asc";
             
-            var applications = await _repository.GetAll(pageNumber, pageSize);
+            var applications = await _repository.GetAll(pageNumber, pageSize, sort, order);
             var totalElements = await _repository.Count();
             var totalPages = Math.Ceiling((double)totalElements / pageSize);
             bool first = pageNumber == 1;
             bool last = pageNumber >= totalPages;
 
-            return Ok(new
-            {
-                content = applications,
-                page = pageNumber,
-                size = pageSize,
-                totalElements,
-                totalPages,
-                first,
-                last
-            });
+            return Ok(applications);
         }
 
         // GET: api/applications/5
