@@ -2,13 +2,6 @@ import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Application } from '@/api/applications';
 
-import {
-  Funnel,
-  ChevronUp,
-  ChevronDown,
-  ChevronsUpDown
-} from 'lucide-react';
-
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +11,13 @@ import {
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card';
+
+import {
+  Funnel,
+  ChevronUp,
+  ChevronDown,
+  ChevronsUpDown
+} from 'lucide-react';
 
 // Define table columns
 export const columns: ColumnDef<Application>[] = [
@@ -33,7 +33,7 @@ export const columns: ColumnDef<Application>[] = [
           Company Name
           {column.getIsSorted() === 'asc' ? (
             <ChevronUp />
-          ) :  column.getIsSorted() === 'desc' ? (
+          ) : column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
             <ChevronsUpDown className="opacity-[0.4]" />
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Application>[] = [
           Position
           {column.getIsSorted() === 'asc' ? (
             <ChevronUp />
-          ) :  column.getIsSorted() === 'desc' ? (
+          ) : column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
             <ChevronsUpDown className="opacity-[0.4]" />
@@ -91,7 +91,7 @@ export const columns: ColumnDef<Application>[] = [
 
                 {column.getIsSorted() === 'asc' ? (
                   <ChevronUp />
-                ) :  column.getIsSorted() === 'desc' ? (
+                ) : column.getIsSorted() === 'desc' ? (
                   <ChevronDown />
                 ) : (
                   <ChevronsUpDown className="opacity-[0.4]" />
@@ -142,7 +142,7 @@ export const columns: ColumnDef<Application>[] = [
           Date Applied
           {column.getIsSorted() === 'asc' ? (
             <ChevronUp />
-          ) :  column.getIsSorted() === 'desc' ? (
+          ) : column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
             <ChevronsUpDown className="opacity-[0.4]" />

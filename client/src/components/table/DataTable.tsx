@@ -84,7 +84,6 @@ export default function DataTable<TData, TValue>({
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
-                  // Set the actions column to width of text
                   let className = '';
                   if (header.id === 'actions') {
                     className = 'text-center';

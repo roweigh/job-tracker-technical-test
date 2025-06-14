@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { SortingState, 
-  ColumnFiltersState
-} from '@tanstack/react-table';
+import { SortingState, ColumnFiltersState } from '@tanstack/react-table';
 import { columns } from '@/components/table/Columns';
 
 import { handle } from '@/api/api-utils';
