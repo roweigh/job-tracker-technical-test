@@ -92,7 +92,6 @@ export default function Home() {
         />
       </div>
 
-      {JSON.stringify(statuses)}
       <DataTable
         columns={columns}
         data={applications}

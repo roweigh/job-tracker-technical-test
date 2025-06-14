@@ -3,6 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Application } from '@/api/applications';
 
 import {
+  Funnel,
   ChevronUp,
   ChevronDown,
   ChevronsUpDown
@@ -63,6 +64,9 @@ export const columns: ColumnDef<Application>[] = [
   {
     accessorKey: 'status',
     header: ({ column }) => {
+      const filterValue = column.getFilterValue() as string[] | undefined;
+      const filterSet = new Set(filterValue ?? []);
+      
       return (
         <HoverCard 
           openDelay={200}
@@ -73,6 +77,12 @@ export const columns: ColumnDef<Application>[] = [
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
             >
+              {filterSet.size > 0 ? (
+                <Funnel />
+              ) : (
+                <Funnel className={'opacity-[0.4]'}/>
+              )}
+
               Status
               {column.getIsSorted() === 'asc' ? (
                 <ChevronUp />
@@ -88,8 +98,6 @@ export const columns: ColumnDef<Application>[] = [
             align={'start'} className="flex flex-col gap-[16px]">
             {['Applied', 'Interview', 'Offer', 'Rejected'].map(
               value => {
-                const filterValue = column.getFilterValue() as string[] | undefined;
-                const filterSet = new Set(filterValue ?? []);
 
                 return (
                   <div key={value} className="flex gap-[8px]">
