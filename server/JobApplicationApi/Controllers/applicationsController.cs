@@ -19,15 +19,16 @@ namespace JobApplicationApi.Controllers
 
         // GET: api/applications
         [HttpGet]
-        public async Task<ActionResult<PaginatedDTO<JobApplication>>> GetJobApplication(int? page, int? size, string? sortBy, string? sortDesc)
+        public async Task<ActionResult<PaginatedDTO<JobApplication>>> GetJobApplication(int? page, int? size, string? sortBy, string? sortDesc, string? status)
         {
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             string sort = sortBy ?? "dateApplied";
             string order = sortDesc == "true" ? "desc" : "asc";
+            string[] statuses = status == null ? [] : status.Split(',');
             
-            var applications = await _repository.GetAll(pageNumber, pageSize, sort, order);
-            var totalElements = await _repository.Count();
+            var applications = await _repository.GetAll(pageNumber, pageSize, sort, order, statuses);
+            var totalElements = await _repository.Count(statuses);
             var totalPages = (int)Math.Ceiling((double)totalElements / pageSize);
             bool first = pageNumber == 1;
             bool last = pageNumber >= totalPages;

@@ -12,9 +12,15 @@ namespace JobApplicationApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<JobApplication>> GetAll(int page, int size, string sort, string order)
+        public async Task<IEnumerable<JobApplication>> GetAll(int page, int size, string sort, string order, string[] statuses)
         {
             IQueryable<JobApplication> items = _context.JobApplication;
+            
+            if (statuses.Any())
+            {
+                items = items.Where(item => statuses.Contains(item.status));
+            }
+
             switch (sort)
             {
                 case "companyName":
@@ -58,9 +64,9 @@ namespace JobApplicationApi.Repositories
         }
 
         // Helper function used to count total elements in paginated data
-        public Task<int> Count()
+        public Task<int> Count(string[] statuses)
         {
-            return _context.JobApplication.CountAsync();
+            return _context.JobApplication.Where(item => statuses.Contains(item.status)).CountAsync();
         }
 
         public bool Exists(int id)
