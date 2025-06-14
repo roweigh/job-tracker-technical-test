@@ -66,7 +66,13 @@ namespace JobApplicationApi.Repositories
         // Helper function used to count total elements in paginated data
         public Task<int> Count(string[] statuses)
         {
-            return _context.JobApplication.Where(item => statuses.Contains(item.status)).CountAsync();
+            if (statuses.Any())
+            {
+                return _context.JobApplication.Where(item => statuses.Contains(item.status)).CountAsync();
+            } 
+            else {
+                return _context.JobApplication.CountAsync();
+            }
         }
 
         public bool Exists(int id)

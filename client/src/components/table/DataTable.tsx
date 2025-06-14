@@ -87,7 +87,7 @@ export default function DataTable<TData, TValue>({
                   // Set the actions column to width of text
                   let className = '';
                   if (header.id === 'actions') {
-                    className = 'w-[60px]';
+                    className = 'text-center';
                   }
 
                   return (
@@ -128,7 +128,7 @@ export default function DataTable<TData, TValue>({
                       );
                     } else {
                       return (
-                        <TableCell key={cell.id}>
+                        <TableCell key={cell.id} className="px-[20px]">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

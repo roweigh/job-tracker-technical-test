@@ -35,7 +35,7 @@ export const columns: ColumnDef<Application>[] = [
           ) :  column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
-            <ChevronsUpDown />
+            <ChevronsUpDown className="opacity-[0.4]" />
           )}
         </Button>
       );
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Application>[] = [
           ) :  column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
-            <ChevronsUpDown />
+            <ChevronsUpDown className="opacity-[0.4]" />
           )}
         </Button>
       );
@@ -73,56 +73,58 @@ export const columns: ColumnDef<Application>[] = [
           closeDelay={200}
         >
           <HoverCardTrigger>
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            >
-              {filterSet.size > 0 ? (
-                <Funnel />
-              ) : (
-                <Funnel className={'opacity-[0.4]'}/>
-              )}
+            <div className={'text-center'}>
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+              >
+                {filterSet.size > 0 ? (
+                  <Funnel />
+                ) : (
+                  <Funnel className="opacity-[0.4]"/>
+                )}
 
-              Status
-              {column.getIsSorted() === 'asc' ? (
-                <ChevronUp />
-              ) :  column.getIsSorted() === 'desc' ? (
-                <ChevronDown />
-              ) : (
-                <ChevronsUpDown />
-              )}
-            </Button>
+                Status
+
+                {column.getIsSorted() === 'asc' ? (
+                  <ChevronUp />
+                ) :  column.getIsSorted() === 'desc' ? (
+                  <ChevronDown />
+                ) : (
+                  <ChevronsUpDown className="opacity-[0.4]" />
+                )}
+              </Button>
+            </div>
           </HoverCardTrigger>
           <HoverCardContent 
             sideOffset={10}
             align={'start'} className="flex flex-col gap-[16px]">
-            {['Applied', 'Interview', 'Offer', 'Rejected'].map(
-              value => {
-
-                return (
-                  <div key={value} className="flex gap-[8px]">
-                    <Checkbox 
-                      checked={filterSet.has(value)}
-                      onCheckedChange={(v) => {
-                        if (v) {
-                          filterSet.add(value);
-                        } else {
-                          filterSet.delete(value);
-                        }
-                        column.setFilterValue([...filterSet]);
-                      }}
-                    />
-                    <Label>{value}</Label>
-                  </div>
-                );
-              }
-            )}
+            {['Applied', 'Interview', 'Offer', 'Rejected'].map(value => (
+              <div key={value} className="flex gap-[8px]">
+                <Checkbox 
+                  checked={filterSet.has(value)}
+                  onCheckedChange={(v) => {
+                    if (v) {
+                      filterSet.add(value);
+                    } else {
+                      filterSet.delete(value);
+                    }
+                    column.setFilterValue([...filterSet]);
+                  }}
+                />
+                <Label>{value}</Label>
+              </div>
+            ))}
           </HoverCardContent>
         </HoverCard>
       );
     },
     cell: ({ row }) => {
-      return <Status status={row.original.status} />;
+      return (
+        <div className="text-center">
+          <Status status={row.original.status} />
+        </div>
+      );
     }
   },
   {
@@ -139,7 +141,7 @@ export const columns: ColumnDef<Application>[] = [
           ) :  column.getIsSorted() === 'desc' ? (
             <ChevronDown />
           ) : (
-            <ChevronsUpDown />
+            <ChevronsUpDown className="opacity-[0.4]" />
           )}
         </Button>
       );
