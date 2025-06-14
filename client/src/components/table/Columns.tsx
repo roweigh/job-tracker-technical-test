@@ -27,6 +27,7 @@ export const columns: ColumnDef<Application>[] = [
       return (
         <Button
           variant="ghost"
+          className="cursor-pointer"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Company Name
@@ -47,6 +48,7 @@ export const columns: ColumnDef<Application>[] = [
       return (
         <Button
           variant="ghost"
+          className="cursor-pointer"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Position
@@ -76,6 +78,7 @@ export const columns: ColumnDef<Application>[] = [
             <div className={'text-center'}>
               <Button
                 variant="ghost"
+                className="cursor-pointer"
                 onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
               >
                 {filterSet.size > 0 ? (
@@ -133,6 +136,7 @@ export const columns: ColumnDef<Application>[] = [
       return (
         <Button
           variant="ghost"
+          className="cursor-pointer"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Date Applied

@@ -197,12 +197,12 @@ function TablePagination({
             onPagination({ ...pagination, page: 1, size: Number(e) });
           }}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-[70px] cursor-pointer">
             <SelectValue placeholder={pagination.size} />
           </SelectTrigger>
           <SelectContent side="top">
             {[10, 20, 25, 30, 40, 50].map(pageSize => (
-              <SelectItem key={pageSize} value={`${pageSize}`}>
+              <SelectItem key={pageSize} value={`${pageSize}`} className="cursor-pointer">
                 {pageSize}
               </SelectItem>
             ))}
@@ -218,7 +218,7 @@ function TablePagination({
       <Button
         variant="ghost"
         size="icon"
-        className="hidden size-8 lg:flex"
+        className="hidden size-8 lg:flex cursor-pointer"
         onClick={() => {
           onPagination({ ...pagination, page: 1 });
         }}
@@ -229,7 +229,7 @@ function TablePagination({
       <Button
         variant="ghost"
         size="icon"
-        className="size-8"
+        className="size-8 cursor-pointer"
         onClick={() => {
           onPagination({ ...pagination, page: pagination.page - 1 });
         }}
@@ -240,7 +240,7 @@ function TablePagination({
       <Button
         variant="ghost"
         size="icon"
-        className="size-8"
+        className="size-8 cursor-pointer"
         onClick={() => {
           onPagination({ ...pagination, page: pagination.page + 1 });
         }}
@@ -251,7 +251,7 @@ function TablePagination({
       <Button
         variant="ghost"
         size="icon"
-        className="hidden size-8 lg:flex"
+        className="hidden size-8 lg:flex cursor-pointer"
         onClick={() => {
           onPagination({ ...pagination, page: pagination.totalPages });
         }}
